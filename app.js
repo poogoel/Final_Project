@@ -48,8 +48,8 @@ function makeResponsive() {
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     // Initial Params
-    var chosenXAxis = "poverty";
-    var chosenYAxis = "healthcare";
+    var chosenXAxis = "yards_per_pass_attempt";
+    var chosenYAxis = "total_points";
 
     // function used for updating x-scale var upon click on axis label
     function xScale(demoData, chosenXAxis) {
@@ -120,31 +120,31 @@ function makeResponsive() {
     // function used for updating circles group with new tooltip
     function updateToolTip(chosenXAxis, chosenYAxis, textGroup) {
 
-        if (chosenXAxis === "poverty") {
-            var xlabel = "In Poverty:";
+        if (chosenXAxis === "yards_per_pass_attempt") {
+            var xlabel = "Yards Per Pass Attempt:";
         }
-        else if (chosenXAxis === "age") {
-            var xlabel = "Median Age:";
+        else if (chosenXAxis === "passing_touchdowns") {
+            var xlabel = "Passing Touchdowns:";
         }
         else {
-            var xlabel = "Median Income:";
+            var xlabel = "Rushing Touchdowns:";
         }
 
-        if (chosenYAxis === "healthcare") {
-            var ylabel = "Lack Healthcare:";
+        if (chosenYAxis === "total_points") {
+            var ylabel = "Total Points:";
         }
-        else if (chosenYAxis === "smokes") {
-            var ylabel = "Smoke";
+        else if (chosenYAxis === "total_touchdowns") {
+            var ylabel = "Total Touchdowns: ";
         }
         else {
-            var ylabel = "Obese";
+            var ylabel = "Total Offensive Plays:";
         }
 
         var toolTip = d3.tip()
             .attr("class", "d3-tip")
             .offset([-8, 0])
             .html(function(d) {
-            return (`${d.state}<br>${xlabel} ${d[chosenXAxis]}<br>${ylabel} ${d[chosenYAxis]}%`);
+            return (`${d.variable}<br>${xlabel} ${d[chosenXAxis]}<br>${ylabel} ${d[chosenYAxis]}`);
             });
 
         textGroup.call(toolTip);
@@ -161,7 +161,7 @@ function makeResponsive() {
     }
 
     // Import Data
-    var file = "assets/data/data.csv"
+    var file = "assets/data/clean_team_stats.csv"
     d3.csv(file).then(successHandle, errorHandle);
 
     function errorHandle(error){
@@ -173,12 +173,12 @@ function makeResponsive() {
         // Step 1: Parse Data/Cast as numbers
         // ==============================
         demoData.forEach(function(data) {
-            data.poverty = +data.poverty;
-            data.healthcare = +data.healthcare;
-            data.age = +data.age;
-            data.income = +data.income;
-            data.obesity = +data.obesity;
-            data.smokes = +data.smokes;
+            data.yards_per_pass_attempt = +data.yards_per_pass_attempt;
+            data.total_points = +data.total_points;
+            data.passing_touchdowns = +data.passing_touchdowns;
+            data.rushing_touchdowns = +data.rushing_touchdowns;
+            data.total_offensive_plays = +data.total_offensive_plays;
+            data.total_touchdowns = +data.total_touchdowns;
         });
 
         // Step 2: Create scale functions
@@ -220,7 +220,7 @@ function makeResponsive() {
             .append("text")
             .attr("class", "label")
             .attr("text-anchor", "middle")
-            .text(function(d) {return d.abbr;})
+            .text(function(d) {return d.team_no;})
             .attr("x", d => xLinearScale(d[chosenXAxis]))
             .attr("y", d => yLinearScale(d[chosenYAxis])+6)
             .attr("fill", "white")
@@ -234,54 +234,54 @@ function makeResponsive() {
             .attr("x", 0 - (height / 2))
             .style("text-anchor", "middle");
 
-        var obesityLabel = ylabelsGroup.append("text")
+        var total_offensive_playsLabel = ylabelsGroup.append("text")
             .attr("y", 0 - margin.left)
             .attr("x", 0 - (height / 2))
-            .attr("value", "obesity")
+            .attr("value", "total_offensive_plays")
             .classed("inactive", true)
             .attr("dy", "1em")
-            .text("Obese (%)");
+            .text("Total Offensive Plays");
 
-        var smokesLabel = ylabelsGroup.append("text")
+        var total_touchdownsLabel = ylabelsGroup.append("text")
             .attr("y", 20 - margin.left)
             .attr("x", 0 - (height / 2))
-            .attr("value", "smokes")
+            .attr("value", "total_touchdowns")
             .classed("inactive", true)
             .attr("dy", "1em")
-            .text("Smokes (%)");
+            .text("Total Touchdowns");
 
-        var healthcareLabel = ylabelsGroup.append("text")
+        var total_pointsLabel = ylabelsGroup.append("text")
             .attr("y", 40 - margin.left)
             .attr("x", 0 - (height / 2))
-            .attr("value", "healthcare")
+            .attr("value", "total_points")
             .classed("active", true)
             .attr("dy", "1em")
-            .text("Lacks Healthcare (%)");
+            .text("Total Points");
 
         // Create group for 3 x-axis labels
         var xlabelsGroup = chartGroup.append("g")
             .attr("transform", `translate(${width / 2}, ${height + 20})`);
 
-        var povertyLabel = xlabelsGroup.append("text")
+        var yards_per_pass_attemptLabel = xlabelsGroup.append("text")
             .attr("x", 0)
             .attr("y", 20)
-            .attr("value", "poverty")
+            .attr("value", "yards_per_pass_attempt")
             .classed("active", true)
-            .text("In Poverty (%)");
+            .text("Yards Per Pass Attempt");
 
-        var ageLabel = xlabelsGroup.append("text")
+        var passing_touchdownsLabel = xlabelsGroup.append("text")
             .attr("x", 0)
             .attr("y", 40)
-            .attr("value", "age")
+            .attr("value", "passing_touchdowns")
             .classed("inactive", true)
-            .text("Age (Median)");
+            .text("Passing Touchdowns");
 
-        var incomeLabel = xlabelsGroup.append("text")
+        var rushing_touchdownsLabel = xlabelsGroup.append("text")
             .attr("x", 0)
             .attr("y", 60)
-            .attr("value", "income")
+            .attr("value", "rushing_touchdowns")
             .classed("inactive", true)
-            .text("Household Income (Median)");
+            .text("Rushing Touchdowns");
 
         // updateToolTip function above csv import
         var textGroup = updateToolTip(chosenXAxis, chosenYAxis, textGroup);
@@ -312,38 +312,38 @@ function makeResponsive() {
             textGroup = updateToolTip(chosenXAxis, chosenYAxis, textGroup);
 
             // changes classes to change bold text
-            if (chosenXAxis === "poverty") {
-                povertyLabel
+            if (chosenXAxis === "yards_per_pass_attempt") {
+                yards_per_pass_attemptLabel
                     .classed("active", true)
                     .classed("inactive", false);
-                ageLabel
+                passing_touchdownsLabel
                     .classed("active", false)
                     .classed("inactive", true);
-                incomeLabel
+                rushing_touchdownsLabel
                     .classed("active", false)
                     .classed("inactive", true);
             
             }
-            else if (chosenXAxis === "age") {
-                povertyLabel
+            else if (chosenXAxis === "passing_touchdowns") {
+                yards_per_pass_attemptLabel
                     .classed("active", false)
                     .classed("inactive", true);
-                ageLabel
+                passing_touchdownsLabel
                     .classed("active", true)
                     .classed("inactive", false);
-                incomeLabel
+                rushing_touchdownsLabel
                     .classed("active", false)
                     .classed("inactive", true);
             
             }
             else {
-                povertyLabel
+                yards_per_pass_attemptLabel
                     .classed("active", false)
                     .classed("inactive", true);
-                ageLabel
+                passing_touchdownsLabel
                     .classed("active", false)
                     .classed("inactive", true);
-                incomeLabel
+                rushing_touchdownsLabel
                     .classed("active", true)
                     .classed("inactive", false);
             }
@@ -375,38 +375,38 @@ function makeResponsive() {
             text = updateToolTip(chosenXAxis, chosenYAxis, textGroup);
 
             // changes classes to change bold text
-            if (chosenYAxis === "obesity") {
-                obesityLabel
+            if (chosenYAxis === "total_offensive_plays") {
+                total_offensive_playsLabel
                     .classed("active", true)
                     .classed("inactive", false);
-                smokesLabel
+                total_touchdownsLabel
                     .classed("active", false)
                     .classed("inactive", true);
-                healthcareLabel
+                total_pointsLabel
                     .classed("active", false)
                     .classed("inactive", true);
             
             }
-            else if (chosenYAxis === "smokes") {
-                obesityLabel
+            else if (chosenYAxis === "total_touchdowns") {
+                total_offensive_playsLabel
                     .classed("active", false)
                     .classed("inactive", true);
-                smokesLabel
+                total_touchdownsLabel
                     .classed("active", true)
                     .classed("inactive", false);
-                healthcareLabel
+                total_pointsLabel
                     .classed("active", false)
                     .classed("inactive", true);
             
             }
             else {
-                obesityLabel
+                total_offensive_playsLabel
                     .classed("active", false)
                     .classed("inactive", true);
-                smokesLabel
+                total_touchdownsLabel
                     .classed("active", false)
                     .classed("inactive", true);
-                healthcareLabel
+                total_pointsLabel
                     .classed("active", true)
                     .classed("inactive", false);
             }
