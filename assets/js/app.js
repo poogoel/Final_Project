@@ -220,7 +220,7 @@ function makeResponsive() {
             .append("text")
             .attr("class", "label")
             .attr("text-anchor", "middle")
-            .text(function(d) {return d.team_no;})
+            .text(function(d) {return d.abbr;})
             .attr("x", d => xLinearScale(d[chosenXAxis]))
             .attr("y", d => yLinearScale(d[chosenYAxis])+6)
             .attr("fill", "white")
