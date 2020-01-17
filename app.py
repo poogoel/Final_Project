@@ -7,24 +7,17 @@ from flask import (
     request,
     redirect)
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
+import sqlalchemy
 from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
 
 DATABASE_URI = 'postgres+psycopg2://postgres:changeme@localhost:5432/team_stats'
-engine = create_engine(DATABASE_URI)
+engine = sqlalchemy.create_engine(DATABASE_URI)
 db = SQLAlchemy(app)
 
 Session = sessionmaker(bind=engine)
 session = Session()
-
-@app.before_first_request
-def setup():
-    # Recreate database each time for demo
-    db.drop_all()
-    db.create_all()
-
 
 class Stats(db.Model):
     __tablename__ = 'team_stats'
@@ -75,7 +68,7 @@ class Stats(db.Model):
     total_penalties = db.Column(db.Integer)
     total_yards_penalized = db.Column(db.Integer)
     
-    def __init__(self,variable,first_downs,first_downs_by_penalty,third_down_percentage,fourth_down_percentage,average_interception_yards,average_kickoff_return_yards,average_punt_return_yards,interceptions,net_average_punt_yards,net_passing_yards,net_passing_yards_per_game,passing_first_downs,passing_touchdowns,rushing_first_downs,rushing_attempts,rushing_touchdowns,rushing_yards,rushing_yards_per_game,total_offensive_plays,total_points,total_points_per_game,total_touchdowns,total_offensive_yards,yards_per_game,yards_per_pass_attempt,yards_per_rush_attempt,completed_passes,attempted_passes,field_goals_completed,field_goals_attempted,total_fumbles,defensive_interception,yards_after_interception,total_kickoffs_received,yards_off_kickoff_received,total_punts_received,yards_off_punts_received,total_punts_kicked,total_punt_yards,total_defensive_sacks,yards_lost_from_sacks,total_penalties,total_yards_penalized):
+    def __init__(self, variable,first_downs,first_downs_by_penalty,third_down_percentage,fourth_down_percentage,average_interception_yards,average_kickoff_return_yards,average_punt_return_yards,interceptions,net_average_punt_yards,net_passing_yards,net_passing_yards_per_game,passing_first_downs,passing_touchdowns,rushing_first_downs,rushing_attempts,rushing_touchdowns,rushing_yards,rushing_yards_per_game,total_offensive_plays,total_points,total_points_per_game,total_touchdowns,total_offensive_yards,yards_per_game,yards_per_pass_attempt,yards_per_rush_attempt,completed_passes,attempted_passes,field_goals_completed,field_goals_attempted,total_fumbles,defensive_interception,yards_after_interception,total_kickoffs_received,yards_off_kickoff_received,total_punts_received,yards_off_punts_received,total_punts_kicked,total_punt_yards,total_defensive_sacks,yards_lost_from_sacks,total_penalties,total_yards_penalized):
         self.variable = variable
         self.first_downs = first_downs
         self.first_downs_by_penalty = first_downs_by_penalty
@@ -124,10 +117,32 @@ class Stats(db.Model):
     def __repr__(self):
         return '<team_id {}>'.format(self.team_id)
 
+@app.before_first_request
+def setup():
+    # Recreate database each time for demo
+    db.drop_all()
+    db.create_all()
+
 # create route that renders index.html template
 @app.route("/")
 def home():
     return render_template("index.html")
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+@app.route("/left-sidebar")
+def left():
+    return render_template("left-sidebar.html")
+
+@app.route("/right-sidebar")
+def right():
+    return render_template("right-sidebar.html")
+
+@app.route("/no-sidebar")
+def none():
+    return render_template("no-sidebar.html")
 
 @app.route("/alldata")
 def alldata():
