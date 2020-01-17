@@ -15,11 +15,19 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/cleaned_team_stats.sqlite"
+#################################################
+# Database Setup
+#################################################
+
+#app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/cleaned_team_stats.sqlite"
 #DATABASE_URI = 'postgres+psycopg2://postgres:changeme@localhost:5432/team_stats'
 #engine = sqlalchemy.create_engine(DATABASE_URI)
 
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/cleaned_team_stats.sqlite"
+
 db = SQLAlchemy(app)
+
+#engine = create_engine("sqlite:///olympicDataFinal.sqlite")
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -28,33 +36,32 @@ Base.prepare(db.engine, reflect=True)
 
 # Save references to each table
 #print(Base.classes.keys())
-Stats = Base.classes.cleaned_team_stats
+Teamstats = Base.classes.cleaned_team_stats
 
 # create route that renders index.html template
 @app.route("/")
 def home():
     return render_template("index.html")
 
-@app.route("/contact")
-def contact():
-    return render_template("contact.html")
+@app.route("/variable")
+def variable():
+    """Return a list of variable."""
 
-@app.route("/left-sidebar")
-def left():
-    return render_template("left-sidebar.html")
+    #Query for the variable
+    
+    results = db.session.query(Teamstats.variable.distinct().label("variable"))
+    variable = [row.variable for row in results.all()]
+    returnvariable=[]
+    for x in variable:
+        if x != None:
+            returnvariable.append(x)
+    returnvariable.sort(reverse = True)
+    
+            
 
-@app.route("/right-sidebar")
-def right():
-    return render_template("right-sidebar.html")
+    #Return a list of the column names (variable names)
+    return jsonify(returnvariable)
 
-@app.route("/no-sidebar")
-def none():
-    return render_template("no-sidebar.html")
-
-@app.route("/alldata")
-def alldata():
-    res = db.session.query(Stats.fetchall())
-    json.dumps([dict(r) for r in res])
 
 if __name__ == "__main__":
     app.run(debug=True)
