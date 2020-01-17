@@ -1,1 +1,1 @@
-web: gunicorn team_stats.app:app
+web: gunicorn app:app
