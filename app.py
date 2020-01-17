@@ -62,9 +62,7 @@ def variable():
     #Return a list of the column names (variable names)
     return jsonify(returnvariable)
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+
 @app.route("/index.html")
 def home_1():
     return render_template("index.html")
