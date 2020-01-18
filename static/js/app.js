@@ -161,7 +161,7 @@ function makeResponsive() {
     }
 
     // Import Data
-    var file = "assets/data/clean_team_stats.csv"
+    var file = "static/data/clean_team_stats.csv"
     d3.csv(file).then(successHandle, errorHandle);
 
     function errorHandle(error){
