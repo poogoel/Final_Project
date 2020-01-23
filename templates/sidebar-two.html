@@ -1,13 +1,18 @@
 <!DOCTYPE HTML>
+<!--
+	Twenty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
 <html>
 	<head>
-		<title>Contact - College Football Maniacs</title>
+		<title>No Sidebar - Twenty by HTML5 UP</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="../static/css/main.css" />
 		<noscript><link rel="stylesheet" href="../static/css/noscript.css" /></noscript>
 	</head>
-	<body class="contact is-preload">
+	<body class="no-sidebar is-preload">
 		<div id="page-wrapper">
 
 			<!-- Header -->
@@ -26,8 +31,8 @@
 											<li><a href="no-sidebar.html">Quaterback Stats Analysis</a></li>
 											<li><a href="right-sidebar.html">Other position Stats Analysis</a></li>
 											<li><a href="sidebar-two.html">Team/Position Stats Analysis</a></li>
-										</ul>
-									<li><a href="contact.html">Contact</a></li>	
+                                        </ul>
+                                    <li><a href="contact.html">Contact</a></li>    
 								</ul>
 							</li>
 							<li><a href="#" class="button primary">Sign Up</a></li>
@@ -39,40 +44,39 @@
 				<article id="main">
 
 					<header class="special container">
-						<span class="icon solid fa-envelope"></span>
-						<h2>Get In Touch</h2>
-						<p>Use the form below to give a piece of your mind.</p>
-					</header>
+						<span class="icon solid fa-mobile-alt"></span>
+						<h2><strong>(Team/Position Stats)-What drives touchdowns </strong></h2>
+						<p>Total yards is correlated with total touchdowns.</br>
+							Yards can be accomplished through various combinations of passing vs rushing yards, </br>
+							although passing generates more yards than rushing for top teams.
+					</p>
+						<script src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+					
 
-					<!-- One -->
-						<section class="wrapper style4 special container medium">
+					<script>
+						function initViz() {
+							var containerDiv = document.getElementById("vizContainer"),
+								url = "https://public.tableau.com/views/CollegeFootballPlayerStats4/TeamLogoDashboard?:display_count=y&:origin=viz_share_link"
+								options = {
+									hideTabs: true,
+									onFirstInteractive: function () {
+										console.log("Run this code when the viz has finished loading.");
+									}
+								};
+					
+							var viz = new tableau.Viz(containerDiv, url, options);
+							// Create a viz object and embed it in the container div.
+						}
+		
+					</script>
+				</header>
 
-							<!-- Content -->
-								<div class="content">
-									<form>
-										<div class="row gtr-50">
-											<div class="col-6 col-12-mobile">
-												<input type="text" name="name" placeholder="Name" />
-											</div>
-											<div class="col-6 col-12-mobile">
-												<input type="text" name="email" placeholder="Email" />
-											</div>
-											<div class="col-12">
-												<input type="text" name="subject" placeholder="Subject" />
-											</div>
-											<div class="col-12">
-												<textarea name="message" placeholder="Message" rows="7"></textarea>
-											</div>
-											<div class="col-12">
-												<ul class="buttons">
-													<li><input type="submit" class="special" value="Send Message" /></li>
-												</ul>
-											</div>
-										</div>
-									</form>
-								</div>
-
-						</section>
+				<body onload="initViz();">
+	
+					<div id="wrapper" class="wrapper">
+						<div id="vizContainer" style="width:1000px; height:600px;"></div>
+					</div>
+				</body>
 
 				</article>
 

@@ -19,9 +19,14 @@
 							<li class="submenu">
 								<a href="#">Stats Analysis<img src="static/images/CFB.jpg" alt="" style="width:70px;height:50px;"/></a>
 								<ul>
-									<li><a href="left-sidebar.html">Touchdown Analysis</a></li>
-									<li><a href="right-sidebar.html">Player Stat Analysis</a></li>
-									<li><a href="no-sidebar.html">Quaterback Analysis</a></li>
+									<li><a href="left-sidebar.html">Team Touchdown Analysis</a></li>
+									<li class="submenu">
+										<a href="#">Player Touchdown Analysis</a>
+										<ul>
+											<li><a href="no-sidebar.html">Quaterback Stats Analysis</a></li>
+											<li><a href="right-sidebar.html">Other position Stats Analysis</a></li>
+											<li><a href="sidebar-two.html">Team/Position Stats Analysis</a></li>
+										</ul>
 									<li><a href="contact.html">Contact</a></li>
 								</ul>
 							</li>
@@ -42,7 +47,7 @@
 						<script>
 							function initViz() {
 								var containerDiv = document.getElementById("vizContainer"),
-									url = "https://public.tableau.com/views/CollegeFootballPlayerStats4/TeamLogoDashboard?:display_count=y&:origin=viz_share_link"
+									url = "https://public.tableau.com/views/CollegeFootballPlayerStats/QBDashboard?:display_count=y&:origin=viz_share_link"
 									options = {
 										hideTabs: true,
 										onFirstInteractive: function () {

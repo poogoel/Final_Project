@@ -123,6 +123,9 @@ def right():
 @app.route("/no-sidebar.html")
 def none():
     return render_template("no-sidebar.html")
+@app.route("/sidebar-two.html")
+def two():
+    return render_template("sidebar-two.html")    
 
 @app.route("/api")
 def api():
