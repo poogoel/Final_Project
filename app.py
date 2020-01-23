@@ -13,6 +13,18 @@ from sqlalchemy import create_engine
 from flask import Flask, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 
+#Need to process these into new requirements:
+from sklearn.externals import joblib
+from sklearn.pipeline import make_pipeline
+from sklearn.base import BaseEstimator, TransformerMixin
+
+class PandasDummies(BaseEstimator, TransformerMixin):
+    def transform(self, X, *_):
+        return pd.get_dummies(X)
+    
+    def fit(self, *_):
+        return self
+
 app = Flask(__name__)
 
 #################################################
@@ -198,8 +210,26 @@ def team(name):
     results.drop("teamname", axis=1, inplace=True)
     results.set_index("variable", inplace=True)
     
-    
     return results.to_json()
+
+@app.route("/ml/points/<stat1>/<stat2>/<stat3>/<stat4>/<stat5>")
+def points(stat1, stat2, stat3, stat4, stat5):
+        #create df with these 5 variables with column names from model
+    data={'third_down_percentage': float(stat1),
+        'yards_per_pass_attempt':float(stat2),
+        'passing_touchdowns':int(stat3),
+        'rushing_touchdowns':int(stat4),
+        'rushing_yards_per_game':int(stat5),
+        }
+    df=pd.DataFrame(data, index=[0])
+    #import model
+    some_totally_random_model = joblib.load("1my_model.pkl")
+    #run number with model
+    results=some_totally_random_model.predict(df)
+    
+    #return result as int
+    return jsonify(f"We predict that {int(results)} points will be scored based on these stats")
+
 if __name__ == "__main__":
     app.run(debug=True)
 

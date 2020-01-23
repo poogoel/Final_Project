@@ -94,3 +94,21 @@
 		}
 
 })(jQuery);
+
+$("#get_it").click(function(){
+
+	var stat1 = $("#stat1").val();
+	var stat2 = $("#stat2").val();
+	var stat3 = $("#stat3").val();
+	var stat4 = $("#stat4").val();
+	var stat5 = $("#stat5").val();
+	
+	$.getJSON("/ml/points/"+(stat1)+"/"+(stat2)+"/"+(stat3)+"/"+(stat4)+"/"+(stat5), function(err, data) {
+		if (err !== null) {
+		  alert('Results: ' + err);
+		} else {
+		  alert('Your query count: ' + data.query.results);
+		}
+	  });
+	
+})
